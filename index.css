@@ -1,0 +1,69 @@
+/* Scrolling Text Section */
+.scrolling-container {
+  width: 100%;
+  height: 50px;
+  overflow: hidden;
+  position: relative;
+  background-color: #f8f9fa;
+}
+
+.scrolling-content {
+  display: flex;
+  animation: scroll 15s linear infinite;
+  white-space: nowrap;
+}
+
+.scrolling-text {
+  padding: 0 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+}
+
+/* Keyframes for scrolling animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Store Header Section */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f8f9fa;
+  height: 60px;
+}
+
+.logo i{
+  display: block;
+}
+
+.search-bar {
+  display: flex;
+  margin: 0 20px;
+  width: 500px; /* Reduced width for the search bar */
+}
+
+.search-bar input {
+  flex-grow: 1;
+  border-radius: 0;
+  border: 1px solid #ccc;
+}
+
+.search-btn {
+  border-radius: 0;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+}
