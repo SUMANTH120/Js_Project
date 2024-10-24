@@ -14,6 +14,7 @@
 }
 
 .scrolling-text {
+  
   padding: 0 50px;
   height: 50px;
   display: flex;
@@ -66,4 +67,12 @@
 .header-buttons {
   display: flex;
   gap: 10px;
+}
+.card{
+  margin-bottom: 10px;
+  width: 400px;
+}
+img{
+  
+  height: 100px;
 }
