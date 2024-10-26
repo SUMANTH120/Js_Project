@@ -628,3 +628,60 @@ function generateBookCards() {
 
 // Call the function to generate cards
 generateBookCards();
+
+// Function to generate book cards based on search input
+function generateBookCards(searchInput = '') {
+  const bookList = document.getElementById('book-list');
+  bookList.innerHTML = ''; // Clear existing cards
+
+  // Retrieve books from localStorage
+  const storedBooks = JSON.parse(localStorage.getItem('books')) || [];
+
+  // Filter books based on the search input (case insensitive)
+  const filteredBooks = storedBooks.filter(book => 
+      book.name.toLowerCase().includes(searchInput.toLowerCase())
+  );
+
+  // Check if there are any matching books
+  if (filteredBooks.length === 0) {
+      bookList.innerHTML = `<p class="text-center">No books found.</p>`;
+      return;
+  }
+
+  // Generate cards for filtered books
+  filteredBooks.forEach(book => {
+      const cardHTML = `
+          <div class="col-md-4 my-3">
+              <div class="card h-100">
+                  <img src="img_avatar3.png" alt="${book.name}" class="card-img-top">
+                  <div class="card-body">
+                      <h5 class="card-title">${book.name}</h5>
+                      <p class="card-text">Author: ${book.author}</p>
+                      <p class="card-text">Description: ${book.description}</p>
+                      <p class="card-text">Price: $${book.price}</p>
+                      <a href="#" class="btn btn-primary">Add to Cart</a>
+                  </div>
+              </div>
+          </div>
+      `;
+      
+      bookList.innerHTML += cardHTML;
+  });
+}
+
+// Search button functionality
+document.getElementById('search-btn').addEventListener('click', function() {
+  const searchInput = document.getElementById('search-input').value.trim();
+  generateBookCards(searchInput); // Call function with search input
+});
+
+// Allow pressing Enter to search
+document.getElementById('search-input').addEventListener('keypress', function(event) {
+  if (event.key === 'Enter') {
+      const searchInput = document.getElementById('search-input').value.trim();
+      generateBookCards(searchInput); // Call function with search input
+  }
+});
+
+// Call the function to generate cards initially (optional)
+// generateBookCards(); // Uncomment if you want to show all cards initially
