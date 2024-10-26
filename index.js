@@ -635,12 +635,32 @@ function generateBookCards(searchInput = '') {
   bookList.innerHTML = ''; // Clear existing cards
 
   // Retrieve books from localStorage
+  // const storedBooks = JSON.parse(localStorage.getItem('books')) || [];
+
+  // // Filter books based on the search input (case insensitive)
+  // const filteredBooks = storedBooks.filter(book => 
+  //     book.name.toLowerCase().includes(searchInput.toLowerCase())
+  // );
   const storedBooks = JSON.parse(localStorage.getItem('books')) || [];
 
-  // Filter books based on the search input (case insensitive)
-  const filteredBooks = storedBooks.filter(book => 
-      book.name.toLowerCase().includes(searchInput.toLowerCase())
-  );
+  // Split the search input into individual words
+ 
+  const searchWords = searchInput.toLowerCase().split(" ");
+  
+  // Initialize an empty array for the filtered books
+  const filteredBooks = [];
+  
+  // Loop through each book and add it to filteredBooks if it matches any search word
+  storedBooks.forEach(book => {
+    for (let i = 0; i < searchWords.length; i++) {
+      if (book.name.toLowerCase().includes(searchWords[i])) {
+        filteredBooks.push(book);
+         // Stop further checking if a match is found
+      }
+    }
+  });
+  
+  
 
   // Check if there are any matching books
   if (filteredBooks.length === 0) {
