@@ -11,118 +11,69 @@ function myopen() {
         <head>
             <title>Login</title>
             <style>
-                form {
-                    background-color: #f8f9fa;
-                    padding: 20px;
-                    border-radius: 10px;
-                    text-align: center;
-                    width: 80%;
-                    margin: auto;
-                }
-                h2 {
-                    text-align: center;
-                }
-                input[type="text"], input[type="password"] {
-                    width: 90%;
-                    padding: 8px;
-                    margin: 5px 0;
-                    border-radius: 5px;
-                    border: 1px solid #ccc;
-                }
-                input[type="submit"] {
-                    width: 95%;
-                    padding: 10px;
-                    background-color: #007bff;
-                    color: white;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                }
-                input[type="submit"]:hover {
-                    background-color: #0056b3;
-                }
-                p {
-                    text-align: center;
-                }
+                /* Your styling here */
             </style>
         </head>
         <body>
             <h2>Login</h2>
             <form id="loginForm">
                 <label for="username">Username:</label><br>
-                <input type="text" id="username" name="username" required><br><br>
-
+                <input type="text" id="username" required><br><br>
                 <label for="password">Password:</label><br>
-                <input type="password" id="password" name="password" required><br><br>
-
+                <input type="password" id="password" required><br><br>
                 <input type="submit" value="Login"><br><br>
-
-                <p>Are you a new user? <a href="#" id="signupLink">Sign Up</a></p>
+                <p id="message"></p>
             </form>
-
-            <p id="message"></p>
-
+            <p>Are you a new user? <a href="#" id="signupLink">Sign Up</a></p>
+            
             <script>
-                // Login form handling
+                // Handle login
                 document.getElementById("loginForm").addEventListener("submit", function(event) {
                     event.preventDefault();
-
                     const username = document.getElementById("username").value;
                     const password = document.getElementById("password").value;
 
-                    // Retrieve password from localStorage
                     const storedPassword = localStorage.getItem(username);
 
                     if (storedPassword === password) {
+                        // Set the logged-in user
+                        localStorage.setItem('currentUser', username);
                         document.getElementById("message").innerText = "Login successful!";
-                        window.opener.replaceLoginButtonWithUsername(username);  // Call to replace login button in parent window
-                        setTimeout(() => {
-                            window.close();  // Close the window after a successful login
-                        }, 1000);
+                        window.opener.replaceLoginButtonWithUsername(username);
+                        setTimeout(() => { window.close(); }, 1000);
                     } else {
                         document.getElementById("message").innerText = "Invalid username or password!";
                     }
                 });
 
-                // Handle the Sign Up link click
+                // Handle sign-up
                 document.getElementById("signupLink").addEventListener("click", function(event) {
                     event.preventDefault();
-                    openSignUpForm();
-                });
-
-                // Function to open the Sign Up form
-                function openSignUpForm() {
                     document.body.innerHTML = \`
-                        <h2>Sign Up</h2>
-                        <form id="signUpForm">
-                            <label for="newUsername">Username:</label><br>
-                            <input type="text" id="newUsername" name="newUsername" required><br><br>
-
-                            <label for="newPassword">Password:</label><br>
-                            <input type="password" id="newPassword" name="newPassword" required><br><br>
-
-                            <input type="submit" value="Sign Up"><br><br>
-                        </form>
-                        <p id="signupMessage"></p>
+                      <h2>Sign Up</h2>
+                      <form id="signUpForm">
+                        <label for="newUsername">Username:</label><br>
+                        <input type="text" id="newUsername" required><br><br>
+                        <label for="newPassword">Password:</label><br>
+                        <input type="password" id="newPassword" required><br><br>
+                        <input type="submit" value="Sign Up"><br><br>
+                      </form>
+                      <p id="signupMessage"></p>
                     \`;
 
-                    // Handle the Sign Up form submission
                     document.getElementById("signUpForm").addEventListener("submit", function(event) {
-                        event.preventDefault();
+                      event.preventDefault();
+                      const newUsername = document.getElementById("newUsername").value;
+                      const newPassword = document.getElementById("newPassword").value;
 
-                        const newUsername = document.getElementById("newUsername").value;
-                        const newPassword = document.getElementById("newPassword").value;
-
-                        // Check if username already exists
-                        if (localStorage.getItem(newUsername)) {
-                            document.getElementById("signupMessage").innerText = "Username already taken!";
-                        } else {
-                            // Store the new user data in localStorage
-                            localStorage.setItem(newUsername, newPassword);
-                            document.getElementById("signupMessage").innerText = "Sign Up successful! You can now log in.";
-                        }
+                      if (localStorage.getItem(newUsername)) {
+                        document.getElementById("signupMessage").innerText = "Username already taken!";
+                      } else {
+                        localStorage.setItem(newUsername, newPassword);
+                        document.getElementById("signupMessage").innerText = "Sign Up successful! You can now log in.";
+                      }
                     });
-                }
+                });
             </script>
         </body>
         </html>
@@ -131,11 +82,117 @@ function myopen() {
 
 // Attach event listener to the login button
 loginButton.addEventListener("click", myopen);
-
-// Function to replace the login button with the username after successful login
 function replaceLoginButtonWithUsername(username) {
-    loginButton.outerHTML = `<p>Welcome, ${username}!</p>`;
+  loginButton.outerHTML = `
+      <p>Welcome, ${username}!</p>
+      <button id="logoutButton">Logout</button>
+  `;
+  document.getElementById("logoutButton").addEventListener("click", logout);
 }
+
+// Logout function
+function logout() {
+  localStorage.removeItem('currentUser');
+  location.reload();  // Reload the page to reset to login state
+}
+function goBackHome() {
+  document.getElementById('book-list').style.display = 'flex';
+  document.getElementById('book-list').style.flexWrap = 'wrap'; // Show the book list
+  document.getElementById('cart-container').style.display = 'none'; // Hide the cart
+}
+// Add to cart function
+function addToCart(book) {
+  const username = localStorage.getItem('currentUser');
+  if (!username) {
+      alert('Please log in to add items to your cart.');
+      return;
+  }
+
+  const cartKey = `${username}_cart`;
+  let cart = JSON.parse(localStorage.getItem(cartKey)) || {};
+
+  if (cart[book.name]) {
+      cart[book.name].quantity += 1;
+  } else {
+      cart[book.name] = { ...book, quantity: 1 };
+  }
+
+  localStorage.setItem(cartKey, JSON.stringify(cart));
+  alert(`${book.name} added to cart!`);
+}
+
+// Display the cart
+function displayCart() {
+  const username = localStorage.getItem('currentUser');
+  if (!username) {
+      alert('Please log in to view your cart.');
+      return;
+  }
+
+  const cartKey = `${username}_cart`;
+  const cart = JSON.parse(localStorage.getItem(cartKey)) || {};
+  const cartContainer = document.getElementById('cart-container');
+  const bookList = document.getElementById('book-list');
+  
+  cartContainer.innerHTML = '';
+  cartContainer.style.display = 'block';
+  bookList.style.display = 'none';  // Hide books
+
+  // Add Back to Home button
+
+
+  let total = 0;
+  Object.values(cart).forEach(item => {
+      total += item.price * item.quantity;
+      const cartItemHTML = `
+          <div class="cart-item">
+              <h5>${item.name}</h5>
+              <p>Author: ${item.author}</p>
+              <p>Price: $${item.price}</p>
+              <p>Quantity: 
+                  <button onclick="updateQuantity('${item.name}', -1)">-</button>
+                  ${item.quantity}
+                  <button onclick="updateQuantity('${item.name}', 1)">+</button>
+              </p>
+          </div>
+      `;
+      cartContainer.innerHTML += cartItemHTML;
+  });
+
+  cartContainer.innerHTML += `<h3>Total Price: $${total.toFixed(2)}</h3>`;
+  cartContainer.innerHTML += `<button id="back-to-home-btn">Back to Home</button>`;
+
+    // Add event listener for the Back to Home button
+    document.getElementById('back-to-home-btn').addEventListener('click', goBackHome);
+}
+
+// Update quantity of items in cart
+function updateQuantity(bookName, change) {
+  const username = localStorage.getItem('currentUser');
+  if (!username) {
+      alert('Please log in to update items in your cart.');
+      return;
+  }
+
+  const cartKey = `${username}_cart`;
+  let cart = JSON.parse(localStorage.getItem(cartKey));
+
+  if (cart[bookName]) {
+      cart[bookName].quantity += change;
+      if (cart[bookName].quantity <= 0) {
+          delete cart[bookName];
+      }
+      localStorage.setItem(cartKey, JSON.stringify(cart));
+      displayCart();
+  }
+}
+
+
+// Attach event listener to cart button to show current user's cart
+document.getElementById('cart-btn').addEventListener("click", () => {
+    document.getElementById('book-list').style.display = 'none';  // Hide books
+    displayCart();  // Show cart
+});
 
 //books here
 const books = [
@@ -679,7 +736,7 @@ function generateBookCards(searchInput = '') {
                       <p class="card-text">Author: ${book.author}</p>
                       <p class="card-text">Description: ${book.description}</p>
                       <p class="card-text">Price: $${book.price}</p>
-                      <a href="#" class="btn btn-primary">Add to Cart</a>
+                      <button onclick='addToCart(${JSON.stringify(book)})' class="btn btn-primary">Add to Cart</button>
                   </div>
               </div>
           </div>
@@ -705,3 +762,85 @@ document.getElementById('search-input').addEventListener('keypress', function(ev
 
 // Call the function to generate cards initially (optional)
 // generateBookCards(); // Uncomment if you want to show all cards initially
+
+
+// function getUsername() {
+//   let username = localStorage.getItem('username');
+//   if (!username) {
+//       username = prompt("Please enter your username:");
+//       localStorage.setItem('username', username);
+//   }
+//   return username;
+// }
+
+// const username = getUsername();
+// function addToCart(book) {
+//   const cartKey = `${username}_cart`;
+//   let cart = JSON.parse(localStorage.getItem(cartKey)) || {};
+
+//   if (cart[book.name]) {
+//       cart[book.name].quantity += 1;
+//   } else {
+//       cart[book.name] = { ...book, quantity: 1 };
+//   }
+
+//   localStorage.setItem(cartKey, JSON.stringify(cart));
+//   alert(`${book.name} added to cart!`);
+// }
+
+// // Display cart items as cards and hide the book list
+// function displayCart() {
+//   const cartKey = `${username}_cart`;
+//   const cart = JSON.parse(localStorage.getItem(cartKey)) || {};
+//   const bookList = document.getElementById('book-list');
+//   const cartContainer = document.getElementById('cart-container');
+//   cartContainer.innerHTML = '';
+//   cartContainer.style.display = 'flex'; // Show the cart container
+//   bookList.style.display = 'none'; // Hide book cards
+
+//   let total = 0;
+//   Object.values(cart).forEach(item => {
+//       total += item.price * item.quantity;
+//       const cartItemHTML = `
+//           <div class="col-md-4 my-3">
+//               <div class="card h-100">
+//                   <div class="card-body">
+//                       <h5 class="card-title">${item.name}</h5>
+//                       <p class="card-text">Author: ${item.author}</p>
+//                       <p class="card-text">Price: $${item.price}</p>
+//                       <p class="card-text">
+//                           Quantity: 
+//                           <button onclick="updateQuantity('${item.name}', -1)">-</button>
+//                           ${item.quantity}
+//                           <button onclick="updateQuantity('${item.name}', 1)">+</button>
+//                       </p>
+//                   </div>
+//               </div>
+//           </div>
+//       `;
+//       cartContainer.innerHTML += cartItemHTML;
+//   });
+
+//   cartContainer.innerHTML += `<div class="col-12"><h3>Total Price: $${total.toFixed(2)}</h3></div>`;
+// }
+
+// // Update the quantity of a cart item
+// function updateQuantity(bookName, change) {
+//   const cartKey = `${username}_cart`;
+//   let cart = JSON.parse(localStorage.getItem(cartKey));
+
+//   if (cart[bookName]) {
+//       cart[bookName].quantity += change;
+//       if (cart[bookName].quantity <= 0) {
+//           delete cart[bookName];
+//       }
+//       localStorage.setItem(cartKey, JSON.stringify(cart));
+//       displayCart();
+//   }
+// }
+
+// // Show cart when the cart button is clicked
+// document.getElementById('cart-btn').addEventListener('click', displayCart);
+
+// // Initialize book list on page load
+// generateBookCards();
