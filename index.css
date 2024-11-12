@@ -101,3 +101,27 @@
 img {
   height: 100px;
 }
+.logo-container {
+  display: flex;
+  gap: 20px; /* Space between each book icon */
+  justify-content: center; /* Center the logos horizontally */
+  align-items: center; /* Center the logos vertically if needed */
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between Back to Home button and search bar */
+}
+
+#back-to-home {
+  display: none; /* Initially hidden */
+}
+
+.search-bar {
+  flex-grow: 1; /* Allows search bar to take remaining space */
+}
