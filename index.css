@@ -14,7 +14,6 @@
 }
 
 .scrolling-text {
-  
   padding: 0 50px;
   height: 50px;
   display: flex;
@@ -44,14 +43,10 @@
   height: 60px;
 }
 
-.logo i{
-  display: block;
-}
-
 .search-bar {
   display: flex;
   margin: 0 20px;
-  width: 500px; /* Reduced width for the search bar */
+  width: 500px;
 }
 
 .search-bar input {
@@ -68,11 +63,41 @@
   display: flex;
   gap: 10px;
 }
-.card{
+
+/* Category Bar */
+.category-bar {
+  text-align: center;
+  padding: 10px 0;
+  background-color: #ffffff;
+  font-size: 1.2rem;
+  color: #555;
+  margin-top: -10px; /* Adjust to fit with search bar */
+}
+
+.category-bar span {
+  cursor: pointer;
+  margin: 0 15px;
+  color: #333;
+}
+
+.category-bar span:hover {
+  color: #007bff;
+}
+
+/* Background Image for Bookstore */
+#main-container {
+  background-image: url('/mnt/data/image.png'); /* Your uploaded image file path */
+  background-size: cover;
+  background-position: center;
+  padding: 20px;
+}
+
+.card {
   margin-bottom: 10px;
   width: 400px;
+  background-color: rgba(255, 255, 255, 0.9); /* Light background to contrast with image */
 }
-img{
-  
+
+img {
   height: 100px;
 }

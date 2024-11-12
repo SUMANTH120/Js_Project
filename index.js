@@ -273,7 +273,7 @@ const books =[
     "author": "Leo Tolstoy",
     "description": "A historical novel that intertwines the lives of Russian aristocracy during the Napoleonic Wars.",
     "price": 22.99,
-    "genre": "Historical Fiction",
+    "genre": "Fiction",
     "imageLink": "https://m.media-amazon.com/images/I/91b0C2YNSrL._AC_UY218_.jpg"
   },
   {
@@ -457,7 +457,7 @@ const books =[
     "author": "Markus Zusak",
     "description": "A story about a young girl in Nazi Germany, narrated by Death.",
     "price": 12.99,
-    "genre": "Historical Fiction",
+    "genre": "Fiction",
     "imageLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQa0r7aFhLHyuKWa-jWl7Zl9dFa8M8Avo26Cw&s"
   },
   {
@@ -633,7 +633,7 @@ const books =[
     "author": "Ta-Nehisi Coates",
     "description": "A magical realist tale about a man escaping slavery in the American South.",
     "price": 16.99,
-    "genre": "Historical Fiction",
+    "genre": "Fiction",
     "imageLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkigFS8xejVP4vpXXIOsleRH3w-2BPWGJJzw&s"
   },
   {
@@ -689,7 +689,7 @@ const books =[
     "author": "Kate Quinn",
     "description": "A story of two women in post-WWI Europe hunting down a Nazi collaborator.",
     "price": 16.99,
-    "genre": "Historical Fiction",
+    "genre": "Fiction",
     "imageLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdFSdjiBWd1jEte_BWvXgxmMhzoJzWClO5MQ&s"
   },
   {
@@ -940,3 +940,63 @@ document.getElementById('search-input').addEventListener('keypress', function(ev
 
 // // Initialize book list on page load
 // generateBookCards();
+
+document.getElementById('fiction').addEventListener('click', () => filterByGenre('Fiction'));
+document.getElementById('thriller').addEventListener('click', () => filterByGenre('Thriller'));
+document.getElementById('fantasy').addEventListener('click', () => filterByGenre('Fantasy'));
+document.getElementById('biography').addEventListener('click', () => filterByGenre('Biography'));
+document.getElementById('horror').addEventListener('click', () => filterByGenre('Horror'));
+document.getElementById('classic').addEventListener('click', () => filterByGenre('Classic'));
+document.getElementById('back-to-home').addEventListener('click', function() {
+generateBookCards(); // Show all books
+  this.style.display = 'none'; // Hide the "Back to Home" button
+});
+function filterByGenre(genre) {
+  generateBookCards('', genre); // Filter by genre
+  document.getElementById('back-to-home').style.display = 'inline-block'; // Show "Back to Home" button
+}
+function generateBookCards(searchInput = '', genreFilter = '') {
+  const bookList = document.getElementById('book-list');
+  bookList.innerHTML = ''; // Clear existing cards
+
+  const searchWords = searchInput.toLowerCase().split(" ");
+  let filteredBooks = storedBooks;
+
+  // Apply search filter
+  if (searchInput) {
+    filteredBooks = filteredBooks.filter(book => 
+      searchWords.some(word => book.name.toLowerCase().includes(word))
+    );
+  }
+
+  // Apply genre filter
+  if (genreFilter) {
+    filteredBooks = filteredBooks.filter(book => book.genre.toLowerCase() === genreFilter.toLowerCase());
+  }
+
+  // Check if there are any matching books
+  if (filteredBooks.length === 0) {
+    bookList.innerHTML = `<p class="text-center">No books found.</p>`;
+    return;
+  }
+
+  // Generate cards for filtered books
+  filteredBooks.forEach(book => {
+    const cardHTML = `
+      <div class="col-md-4 my-3">
+        <div class="card h-100">
+          <img src="${book.imageLink}" alt="${book.name}" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">${book.name}</h5>
+            <p class="card-text">Author: ${book.author}</p>
+            <p class="card-text">Description: ${book.description}</p>
+            <p class="card-text">Price: $${book.price}</p>
+            <button onclick='addToCart(${JSON.stringify(book)})' class="btn btn-primary">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    `;
+    bookList.innerHTML += cardHTML;
+  });
+}
+
