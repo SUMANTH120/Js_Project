@@ -11,7 +11,60 @@ function myopen() {
         <head>
             <title>Login</title>
             <style>
-                /* Your styling here */
+              body {
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    padding: 20px;
+                    background-color: #f4f4f4;
+                    color: #333;
+                }
+                h2 {
+                    text-align: center;
+                    color: #444;
+                }
+                form {
+                    max-width: 300px;
+                    margin: 0 auto;
+                    background: #fff;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                }
+                label {
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                    display: block;
+                }
+                input[type="text"],
+                input[type="password"] {
+                    width: 100%;
+                    padding: 10px;
+                    margin: 10px 0;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                }
+                input[type="submit"] {
+                    width: 100%;
+                    background-color: #007BFF;
+                    color: #fff;
+                    padding: 10px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+                input[type="submit"]:hover {
+                    background-color: #0056b3;
+                }
+                p {
+                    text-align: center;
+                }
+                a {
+                    color: #007BFF;
+                    text-decoration: none;
+                }
+                a:hover {
+                    text-decoration: underline;
+                }
             </style>
         </head>
         <body>
@@ -145,7 +198,7 @@ function displayCart() {
   Object.values(cart).forEach(item => {
       total += item.price * item.quantity;
       const cartItemHTML = `
-          <div class="cart-item">
+          <div class="cart-item" style="color:red">
               <h5>${item.name}</h5>
               <p>Author: ${item.author}</p>
               <p>Price: $${item.price}</p>
@@ -159,7 +212,7 @@ function displayCart() {
       cartContainer.innerHTML += cartItemHTML;
   });
 
-  cartContainer.innerHTML += `<h3>Total Price: $${total.toFixed(2)}</h3>`;
+  cartContainer.innerHTML += `<h3 style="color:violet">Total Price: $${total.toFixed(2)}</h3>`;
   cartContainer.innerHTML += `<button id="back-to-home-btn">Back to Home</button>`;
 
     // Add event listener for the Back to Home button
@@ -984,13 +1037,21 @@ function generateBookCards(searchInput = '', genreFilter = '') {
   filteredBooks.forEach(book => {
     const cardHTML = `
       <div class="col-md-4 my-3">
-        <div class="card h-100">
+        <div class="card" style="width:18rem">
           <img src="${book.imageLink}" alt="${book.name}" class="card-img-top">
           <div class="card-body">
             <h5 class="card-title">${book.name}</h5>
             <p class="card-text">Author: ${book.author}</p>
             <p class="card-text">Description: ${book.description}</p>
             <p class="card-text">Price: $${book.price}</p>
+            <div class="rating text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+    
             <button onclick='addToCart(${JSON.stringify(book)})' class="btn btn-primary">Add to Cart</button>
           </div>
         </div>

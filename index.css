@@ -39,7 +39,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: #f8f9fa;
+  /* background-color: #f8f9fa; */
   height: 60px;
 }
 
@@ -124,4 +124,19 @@ img {
 
 .search-bar {
   flex-grow: 1; /* Allows search bar to take remaining space */
+}
+body {
+  background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20240801/pngtree-d-a-book-store-with-lot-of-books-on-it-window-image_16124471.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+.header-container {
+  background-image: url('https://via.placeholder.com/1500x200?text=Header+Books');
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 20px;
+  /* color: #fff; */
 }
