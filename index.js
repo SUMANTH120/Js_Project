@@ -815,14 +815,29 @@ function generateBookCards() {
   storedBooks.forEach(book => {
     const cardHTML = `
       <div class="col-md-4 my-3">
-        <div class="card h-100">
-          <img src="${book.imageLink}" alt="${book.name}">
-          <div class="card-body">
+        <div class="card" style="width: 24rem; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s;"
+             onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 8px 16px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.2)';"
+             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1)';">
+          <img src="${book.imageLink}" alt="${book.name}" class="card-img-top" style="height: 200px; object-fit: cover;">
+          <div class="card-body" style="padding: 20px;">
             <h5 class="card-title">${book.name}</h5>
             <p class="card-text">Author: ${book.author}</p>
             <p class="card-text">Description: ${book.description}</p>
             <p class="card-text">Price: $${book.price}</p>
-            <a href="#" class="btn btn-primary">Add to Cart</a>
+            <div class="rating text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+            <button onclick='addToCart(${JSON.stringify(book)})'
+                    class="btn btn-primary"
+                    style="border-radius: 10px; background: linear-gradient(to right, #007bff, #0056b3); color: #fff; font-weight: bold; transition: background 0.3s, transform 0.2s;"
+                    onmouseover="this.style.background='linear-gradient(to right, #0056b3, #003d80)'; this.style.transform='scale(1.05)';"
+                    onmouseout="this.style.background='linear-gradient(to right, #007bff, #0056b3)'; this.style.transform='scale(1)';">
+              Add to Cart
+            </button>
           </div>
         </div>
       </div>
@@ -870,28 +885,42 @@ function generateBookCards(searchInput = '') {
 
   // Check if there are any matching books
   if (filteredBooks.length === 0) {
-      bookList.innerHTML = `<p class="text-center">No books found.</p>`;
+      bookList.innerHTML = `<h1 class="text-center" style="color:red">No books found.</h1>`;
       return;
   }
 
   // Generate cards for filtered books
   filteredBooks.forEach(book => {
-      const cardHTML = `
-          <div class="col-md-4 my-3">
-              <div class="card h-100">
-                  <img src="${book.imageLink}" alt="${book.name}" class="card-img-top">
-                  <div class="card-body">
-                      <h5 class="card-title">${book.name}</h5>
-                      <p class="card-text">Author: ${book.author}</p>
-                      <p class="card-text">Description: ${book.description}</p>
-                      <p class="card-text">Price: $${book.price}</p>
-                      <button onclick='addToCart(${JSON.stringify(book)})' class="btn btn-primary">Add to Cart</button>
-                  </div>
-              </div>
+    const cardHTML = `
+      <div class="col-md-4 my-3">
+        <div class="card" style="width: 24rem; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s;"
+             onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 8px 16px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.2)';"
+             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1)';">
+          <img src="${book.imageLink}" alt="${book.name}" class="card-img-top" style="height: 200px; object-fit: cover;">
+          <div class="card-body" style="padding: 20px;">
+            <h5 class="card-title">${book.name}</h5>
+            <p class="card-text">Author: ${book.author}</p>
+            <p class="card-text">Description: ${book.description}</p>
+            <p class="card-text">Price: $${book.price}</p>
+            <div class="rating text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+            <button onclick='addToCart(${JSON.stringify(book)})'
+                    class="btn btn-primary"
+                    style="border-radius: 10px; background: linear-gradient(to right, #007bff, #0056b3); color: #fff; font-weight: bold; transition: background 0.3s, transform 0.2s;"
+                    onmouseover="this.style.background='linear-gradient(to right, #0056b3, #003d80)'; this.style.transform='scale(1.05)';"
+                    onmouseout="this.style.background='linear-gradient(to right, #007bff, #0056b3)'; this.style.transform='scale(1)';">
+              Add to Cart
+            </button>
           </div>
-      `;
-      
-      bookList.innerHTML += cardHTML;
+        </div>
+      </div>
+    `;
+    bookList.innerHTML += cardHTML;
   });
 }
 
@@ -1029,7 +1058,7 @@ function generateBookCards(searchInput = '', genreFilter = '') {
 
   // Check if there are any matching books
   if (filteredBooks.length === 0) {
-    bookList.innerHTML = `<p class="text-center">No books found.</p>`;
+    bookList.innerHTML = `<h1 class="text-center" style="color:red">No books found.</h1>`;
     return;
   }
 
@@ -1037,9 +1066,11 @@ function generateBookCards(searchInput = '', genreFilter = '') {
   filteredBooks.forEach(book => {
     const cardHTML = `
       <div class="col-md-4 my-3">
-        <div class="card" style="width:18rem">
-          <img src="${book.imageLink}" alt="${book.name}" class="card-img-top">
-          <div class="card-body">
+        <div class="card" style="width: 24rem; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s;"
+             onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 8px 16px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.2)';"
+             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1)';">
+          <img src="${book.imageLink}" alt="${book.name}" class="card-img-top" style="height: 200px; object-fit: cover;">
+          <div class="card-body" style="padding: 20px;">
             <h5 class="card-title">${book.name}</h5>
             <p class="card-text">Author: ${book.author}</p>
             <p class="card-text">Description: ${book.description}</p>
@@ -1051,13 +1082,17 @@ function generateBookCards(searchInput = '', genreFilter = '') {
               <i class="fas fa-star"></i>
               <i class="fas fa-star-half-alt"></i>
             </div>
-    
-            <button onclick='addToCart(${JSON.stringify(book)})' class="btn btn-primary">Add to Cart</button>
+            <button onclick='addToCart(${JSON.stringify(book)})'
+                    class="btn btn-primary"
+                    style="border-radius: 10px; background: linear-gradient(to right, #007bff, #0056b3); color: #fff; font-weight: bold; transition: background 0.3s, transform 0.2s;"
+                    onmouseover="this.style.background='linear-gradient(to right, #0056b3, #003d80)'; this.style.transform='scale(1.05)';"
+                    onmouseout="this.style.background='linear-gradient(to right, #007bff, #0056b3)'; this.style.transform='scale(1)';">
+              Add to Cart
+            </button>
           </div>
         </div>
       </div>
     `;
     bookList.innerHTML += cardHTML;
   });
-}
-
+}  
